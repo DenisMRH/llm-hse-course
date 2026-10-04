@@ -230,6 +230,8 @@ class HistoryCallback(TrainerCallback):
 
     def on_log(self, args, state, control, logs=None, **kwargs):
         row = dict(logs or {})
+        if "loss" in row and not math.isfinite(row["loss"]):
+            raise FloatingPointError(f"Non-finite training loss: {row}")
         row["step"] = state.global_step
         row["elapsed_seconds"] = (
             time.time() - self.timer.start_time if self.timer.start_time else 0
@@ -340,6 +342,8 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
     training_seconds = time.time() - timer.start_time
     peak_memory_gb = torch.cuda.max_memory_allocated() / 1024 ** 3
     final = trainer.evaluate()
+    if not math.isfinite(final["eval_loss"]):
+        raise FloatingPointError(f"Non-finite final evaluation: {final}")
     trainer.save_state()
     if not smoke_steps:
         trainer.save_model(str(folder / "model"))
