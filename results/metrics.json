@@ -1,0 +1,29 @@
+[
+  {
+    "initial_loss": 11.216025352478027,
+    "initial_model_preparation_time": 0.0015,
+    "initial_runtime": 31.136,
+    "initial_samples_per_second": 160.586,
+    "initial_steps_per_second": 20.073,
+    "num_input_tokens_seen": 23396352,
+    "eval_loss": 6.44044828414917,
+    "eval_model_preparation_time": 0.0015,
+    "eval_runtime": 31.2321,
+    "eval_samples_per_second": 160.092,
+    "eval_steps_per_second": 20.011,
+    "epoch": 0.023553862140630412,
+    "train_runtime": 933.3594,
+    "train_samples_per_second": 34284.758,
+    "train_steps_per_second": 1071.399,
+    "train_loss": 6.482090231417274,
+    "run": "e1_baseline",
+    "steps": 1428,
+    "training_seconds": 933.4565894603729,
+    "peak_memory_gb": 15.700014591217041,
+    "budget_stop_seconds": 900.2982704639435,
+    "input_tokens_seen": 23396352,
+    "effective_batch_size": 32,
+    "perplexity": 626.6876710011242,
+    "smoke": false
+  }
+]
