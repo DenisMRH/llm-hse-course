@@ -160,5 +160,32 @@
     "effective_batch_size": 32,
     "perplexity": 80.81127894033298,
     "smoke": false
+  },
+  {
+    "initial_loss": 11.210822105407715,
+    "initial_model_preparation_time": 0.0014,
+    "initial_runtime": 41.7352,
+    "initial_samples_per_second": 119.803,
+    "initial_steps_per_second": 14.975,
+    "num_input_tokens_seen": 15204352,
+    "eval_loss": 5.153759956359863,
+    "eval_model_preparation_time": 0.0014,
+    "eval_runtime": 41.6221,
+    "eval_samples_per_second": 120.128,
+    "eval_steps_per_second": 15.016,
+    "train_runtime": 946.092,
+    "train_samples_per_second": 31.385346500094144,
+    "train_steps_per_second": 0.980792078127942,
+    "train_loss": 5.262745125540372,
+    "epoch": 0.015306711531165982,
+    "run": "e7_fp32_tf32",
+    "steps": 928,
+    "training_seconds": 946.1740369796753,
+    "peak_memory_gb": 40.951377868652344,
+    "budget_stop_seconds": 900.6657998561859,
+    "input_tokens_seen": 15204352,
+    "effective_batch_size": 32,
+    "perplexity": 173.08104557998843,
+    "smoke": false
   }
 ]
