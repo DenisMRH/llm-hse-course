@@ -392,9 +392,9 @@ def plot_results():
         times = np.array([row["elapsed_seconds"] for row in training])
         losses = np.array([row["loss"] for row in training])
         ax.plot(times, losses, color=color, alpha=0.18, linewidth=0.8)
-        window = min(10, len(losses))
-        smooth = np.convolve(losses, np.ones(window) / window, mode="valid")
-        ax.plot(times[window-1:], smooth, color=color, label=folder.name, linewidth=1.7,
+        # The same time window keeps smoothing comparable across different speeds.
+        smooth = np.array([losses[(times >= t - 60) & (times <= t)].mean() for t in times])
+        ax.plot(times, smooth, color=color, label=folder.name, linewidth=1.7,
                 linestyle="-" if index % 2 == 0 else "--")
         single, axes = plt.subplots(1, 2, figsize=(12, 4.5), layout="constrained")
         axes[0].plot([r["step"] for r in training], losses, color=color, label="Train loss")
@@ -413,7 +413,7 @@ def plot_results():
         single.savefig(destination / f"{folder.name}_loss.png", dpi=160)
         plt.close(single)
     ax.set(xlabel="Elapsed time since training start (s)", ylabel="Train cross-entropy loss",
-           title="15-minute runs: train loss (rolling mean of 10 logged points)")
+           title="900-second budget: train loss (60-second rolling mean)")
     ax.grid(alpha=0.2)
     ax.set_xticks([0, 150, 300, 450, 600, 750, 900])
     ax.legend(fontsize=9)
