@@ -341,7 +341,10 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
     training = trainer.train()
     training_seconds = time.time() - timer.start_time
     peak_memory_gb = torch.cuda.max_memory_allocated() / 1024 ** 3
-    final = trainer.evaluate()
+    end_evaluations = [row for row in trainer.state.log_history
+                       if "eval_loss" in row and row.get("step") == trainer.state.global_step]
+    final = ({key: value for key, value in end_evaluations[-1].items() if key.startswith("eval_")}
+             if end_evaluations else trainer.evaluate())
     if not math.isfinite(final["eval_loss"]):
         raise FloatingPointError(f"Non-finite final evaluation: {final}")
     trainer.save_state()
@@ -357,6 +360,8 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
         "budget_stop_seconds": timer.stopped_after_seconds,
         "input_tokens_seen": trainer.state.num_input_tokens_seen,
         "effective_batch_size": batch_size * accumulation,
+        "train_samples_per_second": trainer.state.global_step * batch_size * accumulation / training_seconds,
+        "train_steps_per_second": trainer.state.global_step / training_seconds,
         "perplexity": math.exp(final["eval_loss"]), "smoke": bool(smoke_steps),
     }
     (folder / "metrics.json").write_text(json.dumps(metrics, indent=2))
