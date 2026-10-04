@@ -379,7 +379,7 @@ def plot_results():
         raise FileNotFoundError("No completed experiments")
     destination = Path("results")
     destination.mkdir(exist_ok=True)
-    colors = ["#2563eb", "#d97706", "#7c3aed", "#059669", "#dc2626", "#0891b2", "#be185d"]
+    colors = ["#2563eb", "#2563eb", "#d97706", "#d97706", "#059669", "#059669", "#be185d", "#be185d"]
     plt.rcParams.update({"font.size": 11, "axes.spines.top": False, "axes.spines.right": False})
     fig, ax = plt.subplots(figsize=(11, 6), layout="constrained")
     all_metrics = []
@@ -394,7 +394,8 @@ def plot_results():
         ax.plot(times, losses, color=color, alpha=0.18, linewidth=0.8)
         window = min(10, len(losses))
         smooth = np.convolve(losses, np.ones(window) / window, mode="valid")
-        ax.plot(times[window-1:], smooth, color=color, label=folder.name, linewidth=1.7)
+        ax.plot(times[window-1:], smooth, color=color, label=folder.name, linewidth=1.7,
+                linestyle="-" if index % 2 == 0 else "--")
         single, axes = plt.subplots(1, 2, figsize=(12, 4.5), layout="constrained")
         axes[0].plot([r["step"] for r in training], losses, color=color, label="Train loss")
         evaluations = [r for r in rows if "eval_loss" in r or "initial_loss" in r]
@@ -414,13 +415,14 @@ def plot_results():
     ax.set(xlabel="Elapsed time since training start (s)", ylabel="Train cross-entropy loss",
            title="15-minute runs: train loss (rolling mean of 10 logged points)")
     ax.grid(alpha=0.2)
+    ax.set_xticks([0, 150, 300, 450, 600, 750, 900])
     ax.legend(fontsize=9)
     fig.savefig(destination / "train_loss_comparison.png", dpi=160)
     plt.close(fig)
     fig, ax = plt.subplots(figsize=(10, 5), layout="constrained")
     names = [m["run"] for m in all_metrics]
     values = [m["eval_loss"] for m in all_metrics]
-    bars = ax.barh(names, values, color=colors[:len(names)])
+    bars = ax.barh(names, values, color="#2563eb")
     ax.set(xlabel="Final eval loss on the same first 5000 articles", title="Final evaluation after 15 minutes")
     ax.set_xlim(0, max(values) * 1.15)
     ax.bar_label(bars, fmt="%.4f", padding=4)
