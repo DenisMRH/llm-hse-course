@@ -2,6 +2,8 @@ import os
 import argparse
 import json
 import math
+import subprocess
+import sys
 from pathlib import Path
 from datasets import load_dataset
 from transformers import (
@@ -414,9 +416,36 @@ def plot_results():
     (destination / "metrics.json").write_text(json.dumps(all_metrics, indent=2))
 
 
+def run_experiments():
+    experiments = [
+        ("e1_baseline", []),
+        ("e2_learning_rate", ["--learning-rate", "0.0003"]),
+        ("e3_cosine", ["--learning-rate", "0.0003", "--schedule", "cosine"]),
+        ("e4_microbatch", ["--learning-rate", "0.0003", "--schedule", "cosine", "--batch-size", "16", "--accumulation", "2"]),
+        ("e5_fused", ["--learning-rate", "0.0003", "--schedule", "cosine", "--batch-size", "16", "--accumulation", "2", "--optim", "adamw_torch_fused"]),
+        ("e6_compile", ["--learning-rate", "0.0003", "--schedule", "cosine", "--batch-size", "16", "--accumulation", "2", "--optim", "adamw_torch_fused", "--compile"]),
+        ("e7_fp32_tf32", ["--learning-rate", "0.0003", "--schedule", "cosine", "--batch-size", "16", "--accumulation", "2", "--optim", "adamw_torch_fused", "--fp32"]),
+        ("e8_fp32_no_tf32", ["--learning-rate", "0.0003", "--schedule", "cosine", "--batch-size", "16", "--accumulation", "2", "--optim", "adamw_torch_fused", "--fp32", "--no-tf32"]),
+    ]
+    for name, options in experiments:
+        metrics_path = Path("runs", name, "metrics.json")
+        if metrics_path.exists():
+            metrics = json.loads(metrics_path.read_text())
+            if metrics.get("training_seconds", 0) >= MAX_TRAINING_TIME_SECONDS:
+                print(f"SKIP completed {name}", flush=True)
+                continue
+            raise RuntimeError(f"Incomplete result needs inspection: {metrics_path}")
+        command = [sys.executable, "-u", __file__, "train", "--run", name, *options]
+        print("START", " ".join(command), flush=True)
+        with Path("runs", f"{name}.log").open("w") as log:
+            subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
+        print("COMPLETE", metrics_path.read_text(), flush=True)
+    plot_results()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["prepare", "train", "plot"])
+    parser.add_argument("command", choices=["prepare", "train", "plot", "suite"])
     parser.add_argument("--run", default="baseline")
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--accumulation", type=int, default=4)
@@ -432,6 +461,8 @@ if __name__ == "__main__":
         prepare_dataset()
     elif args.command == "plot":
         plot_results()
+    elif args.command == "suite":
+        run_experiments()
     else:
         train_model(args.run, args.batch_size, args.accumulation, args.learning_rate,
                     args.schedule, args.optim, args.compile_model, not args.fp32,
