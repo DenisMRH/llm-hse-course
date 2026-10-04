@@ -206,7 +206,7 @@ def create_model(tokenizer, dtype=torch.bfloat16):
     
     model = Qwen3ForCausalLM._from_config(
         config,
-        attn_implementation='flash_attention_2',
+        attn_implementation='flash_attention_2' if dtype == torch.bfloat16 else 'sdpa',
         torch_dtype=dtype
     )
     
@@ -310,6 +310,7 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
         save_strategy="no", load_best_model_at_end=False, save_only_model=True,
         dataloader_num_workers=4, seed=42, data_seed=42, disable_tqdm=True,
         include_num_input_tokens_seen=True, lr_scheduler_type="constant",
+        logging_nan_inf_filter=False,
     )
     timer = TimeoutCallback(MAX_TRAINING_TIME_SECONDS)
     arguments = TrainingArguments(**config)
@@ -350,9 +351,70 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
     print("FINAL_METRICS", json.dumps(metrics), flush=True)
 
 
+def plot_results():
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    folders = [p.parent for p in sorted(Path("runs").glob("*/metrics.json"))
+               if not json.loads(p.read_text()).get("smoke")]
+    if not folders:
+        raise FileNotFoundError("No completed experiments")
+    destination = Path("results")
+    destination.mkdir(exist_ok=True)
+    colors = ["#2563eb", "#d97706", "#7c3aed", "#059669", "#dc2626", "#0891b2", "#be185d"]
+    plt.rcParams.update({"font.size": 11, "axes.spines.top": False, "axes.spines.right": False})
+    fig, ax = plt.subplots(figsize=(11, 6), layout="constrained")
+    all_metrics = []
+    for index, folder in enumerate(folders):
+        color = colors[index % len(colors)]
+        metrics = json.loads((folder / "metrics.json").read_text())
+        all_metrics.append(metrics)
+        rows = [json.loads(line) for line in (folder / "history.jsonl").read_text().splitlines()]
+        training = [row for row in rows if "loss" in row]
+        times = np.array([row["elapsed_seconds"] for row in training])
+        losses = np.array([row["loss"] for row in training])
+        ax.plot(times, losses, color=color, alpha=0.18, linewidth=0.8)
+        window = min(10, len(losses))
+        smooth = np.convolve(losses, np.ones(window) / window, mode="valid")
+        ax.plot(times[window-1:], smooth, color=color, label=folder.name, linewidth=1.7)
+        single, axes = plt.subplots(1, 2, figsize=(12, 4.5), layout="constrained")
+        axes[0].plot([r["step"] for r in training], losses, color=color, label="Train loss")
+        evaluations = [r for r in rows if "eval_loss" in r or "initial_loss" in r]
+        axes[0].plot([r["step"] for r in evaluations],
+                     [r.get("eval_loss", r.get("initial_loss")) for r in evaluations],
+                     "o--", color="#111827", label="Eval loss (5000 articles)")
+        axes[0].set(xlabel="Optimizer step", ylabel="Cross-entropy loss", title=folder.name)
+        axes[0].legend()
+        rate_rows = [r for r in training if "learning_rate" in r]
+        axes[1].plot([r["elapsed_seconds"] for r in rate_rows],
+                     [r["learning_rate"] for r in rate_rows], color=color)
+        axes[1].set(xlabel="Elapsed time since training start (s)", ylabel="Learning rate", title="Learning-rate schedule")
+        for axis in axes:
+            axis.grid(alpha=0.2)
+        single.savefig(destination / f"{folder.name}_loss.png", dpi=160)
+        plt.close(single)
+    ax.set(xlabel="Elapsed time since training start (s)", ylabel="Train cross-entropy loss",
+           title="15-minute runs: train loss (rolling mean of 10 logged points)")
+    ax.grid(alpha=0.2)
+    ax.legend(fontsize=9)
+    fig.savefig(destination / "train_loss_comparison.png", dpi=160)
+    plt.close(fig)
+    fig, ax = plt.subplots(figsize=(10, 5), layout="constrained")
+    names = [m["run"] for m in all_metrics]
+    values = [m["eval_loss"] for m in all_metrics]
+    bars = ax.barh(names, values, color=colors[:len(names)])
+    ax.set(xlabel="Final eval loss on the same first 5000 articles", title="Final evaluation after 15 minutes")
+    ax.set_xlim(0, max(values) * 1.15)
+    ax.bar_label(bars, fmt="%.4f", padding=4)
+    fig.savefig(destination / "eval_loss_comparison.png", dpi=160)
+    plt.close(fig)
+    (destination / "metrics.json").write_text(json.dumps(all_metrics, indent=2))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["prepare", "train"])
+    parser.add_argument("command", choices=["prepare", "train", "plot"])
     parser.add_argument("--run", default="baseline")
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--accumulation", type=int, default=4)
@@ -366,6 +428,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.command == "prepare":
         prepare_dataset()
+    elif args.command == "plot":
+        plot_results()
     else:
         train_model(args.run, args.batch_size, args.accumulation, args.learning_rate,
                     args.schedule, args.optim, args.compile_model, not args.fp32,
