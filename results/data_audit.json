@@ -1,0 +1,15 @@
+{
+  "rows": 1945063,
+  "train_rows": 1940063,
+  "eval_rows": 5000,
+  "shards": 32,
+  "checked_source_indices": [
+    0,
+    1,
+    4999,
+    5000,
+    60783,
+    1945062
+  ],
+  "source_readback": "PASS"
+}
