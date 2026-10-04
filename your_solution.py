@@ -299,6 +299,8 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
         train_dataset = train_dataset.select(range(128))
         eval_dataset = eval_dataset.select(range(32))
     model = create_model(tokenizer, dtype=torch.bfloat16 if bf16 else torch.float32)
+    # KV cache is for generation; disable it for right-padded training/evaluation.
+    model.config.use_cache = False
     parameter_count = sum(p.numel() for p in model.parameters())
     config = dict(TRAINING_CONFIG)
     config.update(
