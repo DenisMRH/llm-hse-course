@@ -80,17 +80,31 @@ def prepare_tokenizer():
     - Set pad_token to eos_token
     - Return the tokenizer
     """
-    pass
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
+    tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer
 
 
 def tokenize_function(examples, tokenizer):
-    """
-    TODO: Implement tokenization function.
-    - Tokenize the text with truncation and padding to MAX_LENGTH
-    - Create labels from input_ids
-    - Return dictionary with 'labels', 'input_ids', and 'attention_mask'
-    """
-    pass
+    tokenized = tokenizer(
+        examples["text"],
+        truncation=True,
+        padding="max_length",
+        max_length=MAX_LENGTH,
+    )
+
+    tokenized[LABELS] = [
+        [
+            token_id if mask == 1 else -100
+            for token_id, mask in zip(ids, attention_mask)
+        ]
+        for ids, attention_mask in zip(
+            tokenized[INPUT_IDS],
+            tokenized[ATTENTION_MASK],
+        )
+    ]
+
+    return tokenized
 
 
 def save_as_parquets(ds, output_dir=OUTPUT_DIR, num_shards=NUM_SHARDS):
