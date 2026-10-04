@@ -25,10 +25,10 @@ python your_solution.py plot
 
 Каждый из восьми экспериментов имеет лимит 900 секунд. Оценка, сохранение и генерация требуют дополнительного времени. `suite` пропускает завершённые запуски; перед повторным экспериментом используйте новое имя через `train --run NAME` либо отдельную рабочую папку.
 
-Пример отдельного запуска:
+Пример запуска с лучшей конфигурацией этой серии:
 
 ```bash
-python -u your_solution.py train --run my_cosine --learning-rate 0.0003 --schedule cosine --batch-size 16 --accumulation 2 --optim adamw_torch_fused
+python -u your_solution.py train --run my_best --learning-rate 0.0003 --schedule cosine --batch-size 16 --accumulation 2 --optim adamw_torch_fused --compile
 ```
 
 Параметры и результаты опубликованной серии находятся в `results/e*/config.json` и `metrics.json`. История loss — в `history.jsonl`, генерации — в `generations.json`.

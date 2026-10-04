@@ -1,0 +1,5 @@
+{
+  "checkpoint": "runs/e6_compile/model",
+  "parameter_count": 960881664,
+  "saved_model_generation_matches": true
+}
