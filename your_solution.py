@@ -65,6 +65,7 @@ class TimeoutCallback(TrainerCallback):
     def __init__(self, timeout_seconds):
         self.timeout_seconds = timeout_seconds
         self.start_time = None
+        self.stopped_after_seconds = None
     
     def on_train_begin(self, args, state, control, **kwargs):
         self.start_time = time.time()
@@ -73,6 +74,8 @@ class TimeoutCallback(TrainerCallback):
         if self.start_time is not None:
             elapsed = time.time() - self.start_time
             if elapsed > self.timeout_seconds:
+                if self.stopped_after_seconds is None:
+                    self.stopped_after_seconds = elapsed
                 control.should_training_stop = True
                 # Include the final weights in best-checkpoint selection.
                 control.should_evaluate = True
@@ -347,6 +350,7 @@ def train_model(run_name="baseline", batch_size=8, accumulation=4,
         **initial, **final, **training.metrics,
         "run": run_name, "steps": trainer.state.global_step,
         "training_seconds": training_seconds, "peak_memory_gb": peak_memory_gb,
+        "budget_stop_seconds": timer.stopped_after_seconds,
         "input_tokens_seen": trainer.state.num_input_tokens_seen,
         "effective_batch_size": batch_size * accumulation,
         "perplexity": math.exp(final["eval_loss"]), "smoke": bool(smoke_steps),
