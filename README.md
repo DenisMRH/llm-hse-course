@@ -1,6 +1,6 @@
 # LLM: домашнее задание 1
 
-[Исследовательский отчёт](hw1_report.md) · [Код](your_solution.py) · [Результаты и графики](results)
+[Исследовательский отчёт](hw1_report.md) · [Код](your_solution.py) · [Графики](results)
 
 ## Воспроизведение
 
@@ -31,4 +31,4 @@ python your_solution.py plot
 python -u your_solution.py train --run my_best --learning-rate 0.0003 --schedule cosine --batch-size 16 --accumulation 2 --optim adamw_torch_fused --compile
 ```
 
-Параметры и результаты опубликованной серии находятся в `results/e*/config.json` и `metrics.json`. История loss — в `history.jsonl`, генерации — в `generations.json`.
+Параметры и результаты восьми запусков, а также три примера генераций приведены в `hw1_report.md`. В репозитории оставлены три графика, используемые в отчёте. Полные логи и служебные результаты сохраняются на машине запуска.
