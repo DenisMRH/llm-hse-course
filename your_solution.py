@@ -431,6 +431,7 @@ def plot_results():
 
 
 def run_experiments():
+    Path("runs").mkdir(parents=True, exist_ok=True)
     experiments = [
         ("e1_baseline", []),
         ("e2_learning_rate", ["--learning-rate", "0.0003"]),
