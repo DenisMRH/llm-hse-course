@@ -27,7 +27,7 @@ from trl.trainer.sft_trainer import DataCollatorForLanguageModeling
 
 DATA: Path = Path("data")
 TRAIN_SECONDS: float = 300
-ATTENTION_IMPLEMENTATION: str = "sdpa"
+ATTENTION_IMPLEMENTATION: str = "flash_attention_2"
 
 MODEL_CONFIG: dict[str, Any] = dict(
     hidden_size=2048,
@@ -40,7 +40,7 @@ MODEL_CONFIG: dict[str, Any] = dict(
 )
 
 TRAINING_CONFIG: dict[str, Any] = dict(
-    output_dir="results/baseline",
+    output_dir="results/final_best",
     # Настройки для экспериментов.
     per_device_train_batch_size=32,
     gradient_accumulation_steps=2,
@@ -48,7 +48,7 @@ TRAINING_CONFIG: dict[str, Any] = dict(
     torch_compile=False,
     use_liger_kernel=False,
     activation_offloading=False,
-    packing=False,
+    packing=True,
     padding_free=False,
     # Общие параметры обучения и замера.
     max_steps=1_000_000,
@@ -316,7 +316,8 @@ def configure() -> None:
     parser.add_argument("--attention", choices=["sdpa", "flash_attention_2"], default=ATTENTION_IMPLEMENTATION)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--accumulation", type=int, default=2)
-    for name in ("packing", "padding-free", "torch-compile", "use-liger-kernel", "gradient-checkpointing", "activation-offloading"):
+    parser.add_argument("--packing", action=argparse.BooleanOptionalAction, default=TRAINING_CONFIG["packing"])
+    for name in ("padding-free", "torch-compile", "use-liger-kernel", "gradient-checkpointing", "activation-offloading"):
         parser.add_argument("--" + name, action="store_true")
     args = parser.parse_args()
     TRAIN_SECONDS, ATTENTION_IMPLEMENTATION = args.seconds, args.attention
