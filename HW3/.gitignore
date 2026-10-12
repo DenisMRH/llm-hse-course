@@ -1,0 +1,7 @@
+outputs/full_sft/
+.ipynb_checkpoints/
+__pycache__/
+*.log
+*.exit
+._*
+.venv/

@@ -1,0 +1,6 @@
+data/
+results/*/checkpoints/
+__pycache__/
+*.log
+*.exit
+._*

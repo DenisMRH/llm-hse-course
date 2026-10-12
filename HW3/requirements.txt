@@ -1,0 +1,12 @@
+# torch берём с индекса cu126: дефолтное колесо PyPI собрано под CUDA 13 и требует драйвер >= 580
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.8.0+cu126
+transformers==4.56.1
+trl==0.23.1
+datasets==3.6.0
+accelerate==1.6.0
+ipywidgets==8.1.9
+matplotlib==3.10.1
+pandas==2.2.3
+jupyterlab==4.4.9
+ipykernel==6.30.1

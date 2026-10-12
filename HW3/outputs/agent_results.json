@@ -1,0 +1,337 @@
+[
+  {
+    "scenario": 1,
+    "prompts": [
+      "Turn on the kitchen light."
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a smart home assistant. Use only the provided tools. Do not invent missing arguments or claim actions without tool results. Ask for clarification when needed."
+      },
+      {
+        "role": "user",
+        "content": "Turn on the kitchen light."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_2_0",
+            "type": "function",
+            "function": {
+              "name": "turn_light",
+              "arguments": {
+                "room": "kitchen",
+                "state": "on"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "name": "turn_light",
+        "tool_call_id": "call_2_0",
+        "content": "{\"room\": \"kitchen\", \"light\": \"on\", \"temperature\": 21}"
+      },
+      {
+        "role": "assistant",
+        "content": "The kitchen light is on."
+      }
+    ],
+    "state": {
+      "rooms": {
+        "kitchen": {
+          "light": "on",
+          "temperature": 21
+        },
+        "bedroom": {
+          "light": "off",
+          "temperature": 21
+        },
+        "living_room": {
+          "light": "off",
+          "temperature": 20
+        }
+      },
+      "shopping_list": [],
+      "timers": []
+    },
+    "checks_passed": true
+  },
+  {
+    "scenario": 2,
+    "prompts": [
+      "Turn on the kitchen light and set it to 23 degrees."
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a smart home assistant. Use only the provided tools. Do not invent missing arguments or claim actions without tool results. Ask for clarification when needed."
+      },
+      {
+        "role": "user",
+        "content": "Turn on the kitchen light and set it to 23 degrees."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_2_0",
+            "type": "function",
+            "function": {
+              "name": "turn_light",
+              "arguments": {
+                "room": "kitchen",
+                "state": "on"
+              }
+            }
+          },
+          {
+            "id": "call_2_1",
+            "type": "function",
+            "function": {
+              "name": "set_temperature",
+              "arguments": {
+                "room": "kitchen",
+                "value": 23
+              }
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "name": "turn_light",
+        "tool_call_id": "call_2_0",
+        "content": "{\"room\": \"kitchen\", \"light\": \"on\", \"temperature\": 21}"
+      },
+      {
+        "role": "tool",
+        "name": "set_temperature",
+        "tool_call_id": "call_2_1",
+        "content": "{\"room\": \"kitchen\", \"light\": \"on\", \"temperature\": 23}"
+      },
+      {
+        "role": "assistant",
+        "content": "The kitchen light is on and it's set to 23 degrees."
+      }
+    ],
+    "state": {
+      "rooms": {
+        "kitchen": {
+          "light": "on",
+          "temperature": 23
+        },
+        "bedroom": {
+          "light": "off",
+          "temperature": 21
+        },
+        "living_room": {
+          "light": "off",
+          "temperature": 20
+        }
+      },
+      "shopping_list": [],
+      "timers": []
+    },
+    "checks_passed": true
+  },
+  {
+    "scenario": 3,
+    "prompts": [
+      "Make it two degrees warmer in the bedroom.",
+      "Two more degrees."
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a smart home assistant. Use only the provided tools. Do not invent missing arguments or claim actions without tool results. Ask for clarification when needed."
+      },
+      {
+        "role": "user",
+        "content": "Make it two degrees warmer in the bedroom."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_2_0",
+            "type": "function",
+            "function": {
+              "name": "get_room_state",
+              "arguments": {
+                "room": "bedroom"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "name": "get_room_state",
+        "tool_call_id": "call_2_0",
+        "content": "{\"room\": \"bedroom\", \"light\": \"off\", \"temperature\": 21}"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_4_0",
+            "type": "function",
+            "function": {
+              "name": "set_temperature",
+              "arguments": {
+                "room": "bedroom",
+                "value": 23
+              }
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "name": "set_temperature",
+        "tool_call_id": "call_4_0",
+        "content": "{\"room\": \"bedroom\", \"light\": \"off\", \"temperature\": 23}"
+      },
+      {
+        "role": "assistant",
+        "content": "The bedroom is now at 23 degrees."
+      },
+      {
+        "role": "user",
+        "content": "Two more degrees."
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_8_0",
+            "type": "function",
+            "function": {
+              "name": "set_temperature",
+              "arguments": {
+                "room": "bedroom",
+                "value": 25
+              }
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "name": "set_temperature",
+        "tool_call_id": "call_8_0",
+        "content": "{\"room\": \"bedroom\", \"light\": \"off\", \"temperature\": 25}"
+      },
+      {
+        "role": "assistant",
+        "content": "Done, the bedroom is at 25 degrees."
+      }
+    ],
+    "state": {
+      "rooms": {
+        "kitchen": {
+          "light": "off",
+          "temperature": 21
+        },
+        "bedroom": {
+          "light": "off",
+          "temperature": 25
+        },
+        "living_room": {
+          "light": "off",
+          "temperature": 20
+        }
+      },
+      "shopping_list": [],
+      "timers": []
+    },
+    "checks_passed": true
+  },
+  {
+    "scenario": 4,
+    "prompts": [
+      "Thanks!"
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a smart home assistant. Use only the provided tools. Do not invent missing arguments or claim actions without tool results. Ask for clarification when needed."
+      },
+      {
+        "role": "user",
+        "content": "Thanks!"
+      },
+      {
+        "role": "assistant",
+        "content": "You're welcome!"
+      }
+    ],
+    "state": {
+      "rooms": {
+        "kitchen": {
+          "light": "off",
+          "temperature": 21
+        },
+        "bedroom": {
+          "light": "off",
+          "temperature": 21
+        },
+        "living_room": {
+          "light": "off",
+          "temperature": 20
+        }
+      },
+      "shopping_list": [],
+      "timers": []
+    },
+    "checks_passed": true
+  },
+  {
+    "scenario": 5,
+    "prompts": [
+      "Open the garage."
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a smart home assistant. Use only the provided tools. Do not invent missing arguments or claim actions without tool results. Ask for clarification when needed."
+      },
+      {
+        "role": "user",
+        "content": "Open the garage."
+      },
+      {
+        "role": "assistant",
+        "content": "I can't control the garage. I can turn the lights on or off in the kitchen, bedroom or living room, set the temperature there, add items to your shopping list or start timers."
+      }
+    ],
+    "state": {
+      "rooms": {
+        "kitchen": {
+          "light": "off",
+          "temperature": 21
+        },
+        "bedroom": {
+          "light": "off",
+          "temperature": 21
+        },
+        "living_room": {
+          "light": "off",
+          "temperature": 20
+        }
+      },
+      "shopping_list": [],
+      "timers": []
+    },
+    "checks_passed": true
+  }
+]
