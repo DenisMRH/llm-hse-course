@@ -1,0 +1,55 @@
+prompt,base,after_sft
+Turn on the kitchen light.,"<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""kitchen"", ""state"": ""on""}}
+</tool_call>","<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""kitchen"", ""state"": ""on""}}
+</tool_call>"
+Set the bedroom to 23 degrees.,"<tool_call>
+{""name"": ""set_temperature"", ""arguments"": {""room"": ""bedroom"", ""value"": 23}}
+</tool_call>","<tool_call>
+{""name"": ""set_temperature"", ""arguments"": {""room"": ""bedroom"", ""value"": 23}}
+</tool_call>"
+What is the state of the living room?,"<tool_call>
+{""name"": ""get_room_state"", ""arguments"": {""room"": ""living_room""}}
+</tool_call>","<tool_call>
+{""name"": ""get_room_state"", ""arguments"": {""room"": ""living_room""}}
+</tool_call>"
+Add two cartons of milk to my shopping list.,"<tool_call>
+{""name"": ""add_to_shopping_list"", ""arguments"": {""item"": ""milk"", ""quantity"": 2}}
+</tool_call>","<tool_call>
+{""name"": ""add_to_shopping_list"", ""arguments"": {""item"": ""cartons of milk""}}
+</tool_call>"
+Set a 10-minute timer labeled pasta.,"<tool_call>
+{""name"": ""set_timer"", ""arguments"": {""minutes"": 10, ""label"": ""pasta""}}
+</tool_call>","<tool_call>
+{""name"": ""set_timer"", ""arguments"": {""minutes"": 10, ""label"": ""pasta""}}
+</tool_call>"
+Turn off the bedroom light and set its temperature to 20 degrees.,"<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""bedroom"", ""state"": ""off""}}
+</tool_call>
+<tool_call>
+{""name"": ""set_temperature"", ""arguments"": {""room"": ""bedroom"", ""value"": 20}}
+</tool_call>","<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""bedroom"", ""state"": ""off""}}
+</tool_call>
+<tool_call>
+{""name"": ""set_temperature"", ""arguments"": {""room"": ""bedroom"", ""value"": 20}}
+</tool_call>"
+Turn off all lights.,"<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""all"", ""state"": ""off""}}
+</tool_call>","<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""kitchen"", ""state"": ""off""}}
+</tool_call>
+<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""bedroom"", ""state"": ""off""}}
+</tool_call>
+<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""living_room"", ""state"": ""off""}}
+</tool_call>"
+Hello!,How can I help you today?,"Hello! I can control lights and temperature in your kitchen, bedroom and living room, manage your shopping list and set timers. What would you like?"
+Open the garage.,"<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""garage"", ""state"": ""on""}}
+</tool_call>","I can't control the garage. I can turn the lights on or off in the kitchen, bedroom or living room, set the temperature there, add items to your shopping list or start timers."
+Turn on the light.,"<tool_call>
+{""name"": ""turn_light"", ""arguments"": {""room"": ""living_room"", ""state"": ""on""}}
+</tool_call>","Which room: kitchen, bedroom or living room?"
