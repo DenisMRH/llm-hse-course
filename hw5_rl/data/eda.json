@@ -1,0 +1,72 @@
+{
+  "source": "Team-ACE/ToolACE",
+  "source_sha256": "ba12c083fca7e8da48c67ad5b895e495447da7c66e39a2e19742c082e6cb537e",
+  "benchmark_sha256": "b257ffe2c539897123706ed2211f9ad0e68b8f8fbad7b523ba5a3fcca2a457b2",
+  "model": "Qwen/Qwen3.5-2B",
+  "model_revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+  "seed": 42,
+  "all_dialogues": 11300,
+  "counts": {
+    "dialogues": 11300,
+    "call": 8906,
+    "no_call": 1348,
+    "invalid_ValueError": 879,
+    "invalid_SyntaxError": 103,
+    "too_long": 64
+  },
+  "selected_train": 3000,
+  "selected_validation": 300,
+  "standard_train": {
+    "call": 2611,
+    "no_call": 389
+  },
+  "balanced_train": {
+    "total": 3000,
+    "call": 2000,
+    "no_call": 1000,
+    "distinct_no_call": 358
+  },
+  "max_prompt_tokens": 1536,
+  "quantiles": {
+    "question_chars": {
+      "0": 23,
+      "0.5": 166,
+      "0.9": 655,
+      "0.99": 1194,
+      "1": 4103
+    },
+    "answer_chars": {
+      "0": 8,
+      "0.5": 126,
+      "0.9": 377,
+      "0.99": 940,
+      "1": 2796
+    },
+    "tools": {
+      "0": 1,
+      "0.5": 3,
+      "0.9": 6,
+      "0.99": 8,
+      "1": 9
+    },
+    "prompt_tokens": {
+      "0": 272,
+      "0.5": 658,
+      "0.9": 1041,
+      "0.99": 1388,
+      "1": 1535
+    }
+  },
+  "examples": {
+    "call": {
+      "question": "I'm considering investing and I'd like to know what's happening in the market right now. Could you get me the top market trends in the US?",
+      "answer": "[Market Trends API(trend_type=\"MARKET_INDEXES\", country=\"us\")]",
+      "tools": 6
+    },
+    "no_call": {
+      "question": "Could you help me find some trending hashtags on TikTok right now?",
+      "answer": "I don't have the capability to directly fetch real-time trends or the current trending hashtags on TikTok. However, if you have a specific hashtag in mind, I can retrieve detailed information about it. Could you please specify the hashtag you are int",
+      "tools": 5
+    }
+  }
+}

@@ -1,0 +1,14 @@
+assignment.pdf
+toolace_data.json
+hf_cache/
+cache/
+tmp/
+*.log
+__pycache__/
+data/train.jsonl
+data/train_balanced.jsonl
+data/validation.jsonl
+figures/
+runs/*/adapter/
+runs/*/merged/
+runs/*/trainer/

@@ -1,0 +1,11 @@
+{
+  "name": "rl4_balanced_concise",
+  "hypothesis": "On the same balanced data, penalizing long or truncated no-tool answers improves irrelevance without losing tool-call accuracy.",
+  "reward": "concise_no_call",
+  "loss_type": "grpo",
+  "scale_rewards": "group",
+  "learning_rate": 5e-05,
+  "lora_r": 16,
+  "max_steps": 120,
+  "train_file": "data/train_balanced.jsonl"
+}

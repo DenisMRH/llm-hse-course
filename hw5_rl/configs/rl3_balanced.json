@@ -1,0 +1,11 @@
+{
+  "name": "rl3_balanced",
+  "hypothesis": "Raising the no-tool share to one third while keeping the reward and 120 steps unchanged improves irrelevance accuracy.",
+  "reward": "dense",
+  "loss_type": "grpo",
+  "scale_rewards": "group",
+  "learning_rate": 0.00005,
+  "lora_r": 16,
+  "max_steps": 120,
+  "train_file": "data/train_balanced.jsonl"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "rl2_early_stop",
+  "hypothesis": "Stopping at 40 steps prevents drift toward long and truncated no-tool answers while keeping all other settings fixed.",
+  "reward": "dense",
+  "loss_type": "grpo",
+  "scale_rewards": "group",
+  "learning_rate": 0.00005,
+  "lora_r": 16,
+  "max_steps": 40
+}

@@ -1,0 +1,14 @@
+{
+  "model": "Qwen/Qwen3.5-2B",
+  "model_revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+  "trainable_parameters": 10911744,
+  "total_parameters": 2224153408,
+  "seconds": 644.3,
+  "active_seconds_last_attempt": 593.9,
+  "peak_allocated_gib": 29.81,
+  "train_loss": 0.005036841705441475,
+  "step": 120,
+  "train_samples": 3000,
+  "train_file": "data/train_balanced.jsonl",
+  "validation_samples": 300
+}
