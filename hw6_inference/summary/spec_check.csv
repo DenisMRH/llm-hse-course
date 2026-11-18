@@ -1,0 +1,4 @@
+phase,config,rpm,mean_s,p90_s,ttft_mean_ms,itl_mean_ms,output_tokens_mean,accepted_draft_pct_with_warmup,successes,errors,complete,effective_rpm,configured_duration_s,sent_rpm,export,speedup_at_120
+spec_check,plain_v1,60,5.742369445806249,7.6092465375,114.38510766875,13.392442352555657,417.56875,,160.0,0,True,57.64185828568055,,,spec_check/plain_v1/60/profile/profile_export_aiperf.json,
+spec_check,plain_v1,120,7.10648078931875,10.185791013699998,125.40991403125,16.622132132219374,416.98125,,160.0,0,True,109.93919678126659,,,spec_check/plain_v1/120/profile/profile_export_aiperf.json,
+spec_check,plain_v1,240,12.29483132778125,17.746411986200002,188.918530175,29.00656361185745,415.69375,,160.0,0,True,191.1747063593416,,,spec_check/plain_v1/240/profile/profile_export_aiperf.json,

@@ -1,0 +1,11 @@
+.scratch/
+__pycache__/
+data/requests.jsonl
+results/**/*
+!results/**/
+!results/*/*/*/profile/profile_export_aiperf.json
+!results/spec/spec/metrics-*.txt
+!results/tuning/base_ngram/metrics-*.txt
+interrupted-pass1/
+reruns/
+rerun_summary/
